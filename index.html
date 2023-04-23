@@ -32,26 +32,33 @@
   </div>
   
   <script>
-    const form = document.querySelector('form');
+
+const form = document.querySelector('form');
 const error = document.querySelector('#error');
 
 form.addEventListener('submit', function(e) {
   e.preventDefault();
-  // if (password !== confirm) {
-  //   error.textContent = 'Passwords do not match';
-  //   return;
-  // }
   const name = form.name.value.trim();
-  console.log(name)
-  localStorage.setItem('Name', name);
-  
   const email = form.email.value.trim();
-  console.log(email)
-  localStorage.setItem('Email', email);
   const password = form.password.value.trim();
-  localStorage.setItem('Password', password);
   const confirm = form['confirm-password'].value.trim();
-  localStorage.setItem('Confirm',confirm )
+
+  // generate a unique key using the current timestamp
+  const key = Date.now().toString();
+
+  // create an object to store the user's information
+  const user = {
+    name: name,
+    email: email,
+    password: password,
+    confirm: confirm
+  };
+
+  // serialize the user object and store it in local storage using the unique key
+  localStorage.setItem(key, JSON.stringify(user));
+
+  // clear the form
+  form.reset();
 });
 
   </script>
