@@ -1,0 +1,12 @@
+#form{
+    text-align: center;
+    background-color: rgb(243, 243, 243);
+}
+#mainForm{
+    background-color: aqua;
+    text-align: center;
+    box-sizing: 1px solid rgb(206, 16, 16);;
+}
+#span{
+    border: 1px solid black;
+}
