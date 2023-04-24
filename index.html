@@ -25,16 +25,26 @@
       <div style="display:flex; justify-content:center;">
         <input type="submit" value="Sign Up" id="sign">
       </div>
-      
-  
-      <div class="error"></div>
     </form>
   </div>
   
   <script>
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('delete-button')) {
+    // remove the user information element from the UI
+    const userInfo = e.target.parentNode;
+    userInfo.parentNode.removeChild(userInfo);
 
+    // remove the user information from local storage
+    const key = localStorage.key(userInfo);
+    localStorage.removeItem(key);
+  }
+});
 const form = document.querySelector('form');
-const error = document.querySelector('#error');
+const container = document.createElement('div');
+container.style.display = 'flex';
+container.style.flexWrap = 'wrap';
+document.body.appendChild(container);
 
 form.addEventListener('submit', function(e) {
   e.preventDefault();
@@ -43,28 +53,22 @@ form.addEventListener('submit', function(e) {
   const password = form.password.value.trim();
   const confirm = form['confirm-password'].value.trim();
   
-const userInfo = document.createElement('div');
-userInfo.innerHTML = `
-  <h2>User Information</h2>
-  <p>Name: ${name}</p>
-  <p>Email: ${email}</p>
-  <p>Password: ${password}</p>
-`;
-userInfo.style.position = 'fixed';
-userInfo.style.top = '0';
-userInfo.style.left = '0';
-userInfo.style.width = '20%';
-
-userInfo.style.padding = '20px';
-userInfo.style.background = '#fff';
-userInfo.style.borderBottom = '1px solid #ccc';
-
-
-
-document.body.appendChild(userInfo);
-
-  // generate a unique key using the current timestamp
-  const key = Date.now().toString();
+  const userInfo = document.createElement('div');
+  const key = Date.now().toString(); // generate a unique key using the current timestamp
+  userInfo.id = key; // add a unique ID to the user information element
+  userInfo.innerHTML = `
+    <h2>User Information</h2>
+    <p>Name: ${name}</p>
+    <p>Email: ${email}</p>
+    <p>Password: ${password}</p>
+    <button class="delete-button" data-key="${key}">Delete</button>
+  `;
+  userInfo.style.position = 'relative';
+  userInfo.style.width = '20%';
+  userInfo.style.padding = '20px';
+  userInfo.style.background = '#fff';
+  userInfo.style.margin = '10px';
+  container.appendChild(userInfo);
 
   // create an object to store the user's information
   const user = {
@@ -80,6 +84,24 @@ document.body.appendChild(userInfo);
   // clear the form
   form.reset();
 });
+
+// add event listener for all delete buttons
+container.addEventListener('click', function(e) {
+  if (e.target.classList.contains('delete-button')) {
+    // remove the user information element from the UI
+    const userInfo = e.target.parentNode;
+    userInfo.parentNode.removeChild(userInfo);
+
+    // remove the user information from local storage
+    const key = e.target.getAttribute('data-key');
+    localStorage.removeItem(key);
+  }
+});
+
+  
+ 
+
+
 
   </script>
   </body>
