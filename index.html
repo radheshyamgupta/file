@@ -29,17 +29,6 @@
   </div>
   
   <script>
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('delete-button')) {
-    // remove the user information element from the UI
-    const userInfo = e.target.parentNode;
-    userInfo.parentNode.removeChild(userInfo);
-
-    // remove the user information from local storage
-    const key = localStorage.key(userInfo);
-    localStorage.removeItem(key);
-  }
-});
 const form = document.querySelector('form');
 const container = document.createElement('div');
 container.style.display = 'flex';
@@ -61,6 +50,7 @@ form.addEventListener('submit', function(e) {
     <p>Name: ${name}</p>
     <p>Email: ${email}</p>
     <p>Password: ${password}</p>
+    <button class="edit-button" data-key="${key}">Edit</button>
     <button class="delete-button" data-key="${key}">Delete</button>
   `;
   userInfo.style.position = 'relative';
@@ -96,12 +86,28 @@ container.addEventListener('click', function(e) {
     const key = e.target.getAttribute('data-key');
     localStorage.removeItem(key);
   }
-});
-
   
- 
+  if (e.target.classList.contains('edit-button')) {
+    // get the user information element
+    const userInfo = e.target.parentNode;
 
+    // get the user information from local storage
+    const key = e.target.getAttribute('data-key');
+    const user = JSON.parse(localStorage.getItem(key));
 
+    // pre-fill the form with the user's information
+    form.name.value = user.name;
+    form.email.value = user.email;
+    form.password.value = user.password;
+    form['confirm-password'].value = user.confirm;
+
+    // remove the user information element from the UI
+    userInfo.parentNode.removeChild(userInfo);
+
+    // remove the user information from local storage
+    localStorage.removeItem(key);
+  }
+});
 
   </script>
   </body>
